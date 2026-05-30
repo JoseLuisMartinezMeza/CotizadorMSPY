@@ -110,9 +110,10 @@ Sistema híbrido: **matching exacto por substring** + **fuzzy matching fallback*
 | 12 | **Cocineta** | 🆕 Agregada al template |
 | 13 | **Pizarrones** | 🆕 Agregada al template |
 
-> Las 3 categorías nuevas están **físicamente en el template** (`Formato Cotización 2026 GDL (1).xlsx`):
-> - En `Mobiliti`: 3 secciones nuevas (11, 12, 13) con fórmulas copiadas de secciones existentes
-> - En `Fletes`: agregadas a la lista `Mobiliario` (I16:I18) y tabla de instalación (M16:N18)
+> Las 3 categorías nuevas se agregan **dinámicamente durante la ejecución**:
+> - En `Mobiliti`: si se necesitan más de 10 secciones, el script copia las fórmulas de la sección 1 a las nuevas secciones (11, 12, 13) y corrige las referencias
+> - En `Fletes`: agregadas a la lista `Mobiliario` (I16:I18) por el script principal
+> - El template físico NO se modifica; todo se hace en tiempo de ejecución vía xlwings
 
 #### Correcciones de Clasificación
 
@@ -219,9 +220,9 @@ max_prod_per_section = 32
 | 2025-05-30 | Feature: clasificador de productos JSON + fuzzy matching |
 | 2025-05-30 | Feature: 3 categorías nuevas (Bancos, Cocineta, Pizarrones) |
 | 2025-05-30 | Feature: sinónimos ES/EN con tolerancia a typos y acentos |
-| 2025-05-30 | Template: 3 secciones nuevas agregadas físicamente a Mobiliti |
-| 2025-05-30 | Template: categorías nuevas agregadas a lista Mobiliario y tabla de instalación en Fletes |
-| 2025-05-30 | Script: actualizado para usar 13 secciones en vez de 10 |
+| 2025-05-30 | Script: secciones 11-13 preparadas dinámicamente durante ejecución (copia de fórmulas + corrección de referencias) |
+| 2025-05-30 | Fix: template físico restaurado a original; secciones adicionales se generan en tiempo de ejecución |
+| 2025-05-30 | Fix: corrección de referencias C$13 en secciones copiadas para evitar errores de moneda |
 
 ---
 
