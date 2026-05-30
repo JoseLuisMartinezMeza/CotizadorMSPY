@@ -1,0 +1,70 @@
+diff --git a/apps/web/src/components/ChatComposer.tsx b/apps/web/src/components/ChatComposer.tsx
+index e5de862..4937978 100644
+--- a/apps/web/src/components/ChatComposer.tsx
++++ b/apps/web/src/components/ChatComposer.tsx
+@@ -89,6 +89,9 @@ interface SlashCommand {
+   argHint?: string;
+   // Icon glyph from the project Icon set.
+   icon: 'sparkles' | 'eye' | 'sliders';
++  // Optional literal description (bypasses i18n). When present, takes
++  // precedence over descKey in the slash popover.
++  desc?: string;
+ }
+ 
+ interface Props {
+@@ -215,6 +218,7 @@ export const ChatComposer = forwardRef<ChatComposerHandle, Props>(
+     ref
+   ) {
+     const t = useT();
++    const { locale } = useI18n();
+     const analytics = useAnalytics();
+     const [draft, setDraft] = useState(initialDraft ?? "");
+ 
+@@ -527,6 +531,17 @@ export const ChatComposer = forwardRef<ChatComposerHandle, Props>(
+           },
+         );
+       }
++      // Map every available skill to a `/`-invokable slash command so
++      // users can trigger skills without memorising the `@` mention flow.
++      for (const skill of skills) {
++        list.push({
++          id: `skill-${skill.id}`,
++          label: `/${skill.id}`,
++          insert: `${inlineMentionToken(skill.id)} `,
++          desc: skill.description || localizeSkillName(locale, skill),
++          icon: 'sparkles',
++        });
++      }
+       return list;
+     }, [petEnabled, researchAvailable, t, enabledMcpServers, onOpenMcpSettings]);
+ 
+@@ -543,8 +558,9 @@ export const ChatComposer = forwardRef<ChatComposerHandle, Props>(
+       const before = draft.slice(0, slash.cursor);
+       const after = draft.slice(slash.cursor);
+       // Replace the in-flight `/<query>` token with the picked
+-      // command's canonical insertion text.
+-      const replaced = before.replace(/\/[^\s/]*$/, cmd.insert);
++      // command's canonical insertion text. Handles both leading-start
++      // (`/foo`) and leading-space (`bar /foo`) forms.
++      const replaced = before.replace(/(^|\s)\/[^\s/]*$/, (_match, leading) => leading + cmd.insert);
+       const next = replaced + after;
+       setDraft(next);
+       setSlash(null);
+@@ -1010,7 +1026,7 @@ export const ChatComposer = forwardRef<ChatComposerHandle, Props>(
+       // `/` (and the cursor is still inside the bare command token, no
+       // space yet). Closes once the user commits a space or moves past
+       // the prefix.
+-      const slashMatch = /^\/([^\s/]*)$/.exec(before);
++      const slashMatch = /(?:^|\s)\/([^\s/]*)$/.exec(before);
+       if (slashMatch) {
+         setSlash({ q: slashMatch[1] ?? '', cursor });
+         setSlashIndex(0);
+@@ -2452,7 +2468,7 @@ function SlashPopover({
+                   <span className="slash-item-arg">{cmd.argHint}</span>
+                 ) : null}
+               </span>
+-              <span className="slash-item-desc">{t(cmd.descKey)}</span>
++              <span className="slash-item-desc">{cmd.desc ?? t(cmd.descKey)}</span>
+             </span>
+           </button>
+         );
