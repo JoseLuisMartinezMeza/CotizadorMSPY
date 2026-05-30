@@ -106,9 +106,13 @@ Sistema híbrido: **matching exacto por substring** + **fuzzy matching fallback*
 | 8 | Phonebooths | Original |
 | 9 | Multicontactos | Original |
 | 10 | Terminados | Original |
-| 11 | **Bancos** | 🆕 Agregada |
-| 12 | **Cocineta** | 🆕 Agregada |
-| 13 | **Pizarrones** | 🆕 Agregada |
+| 11 | **Bancos** | 🆕 Agregada al template |
+| 12 | **Cocineta** | 🆕 Agregada al template |
+| 13 | **Pizarrones** | 🆕 Agregada al template |
+
+> Las 3 categorías nuevas están **físicamente en el template** (`Formato Cotización 2026 GDL (1).xlsx`):
+> - En `Mobiliti`: 3 secciones nuevas (11, 12, 13) con fórmulas copiadas de secciones existentes
+> - En `Fletes`: agregadas a la lista `Mobiliario` (I16:I18) y tabla de instalación (M16:N18)
 
 #### Correcciones de Clasificación
 
@@ -186,8 +190,9 @@ No requiere modificar código. El script recarga el JSON en cada ejecución.
 
 ```python
 Q_HEADER_ROW = 7
-section_cats = [13, 48, 83, 118, 153, 188, 223, 258, 293, 328]
-section_prod_starts = [14, 49, 84, 119, 154, 189, 224, 259, 294, 329]
+section_cats = [13, 48, 83, 118, 153, 188, 223, 258, 293, 328, 363, 397, 431]
+section_prod_starts = [14, 49, 84, 119, 154, 189, 224, 259, 294, 329, 364, 398, 432]
+section_subtotals = [47, 82, 117, 152, 187, 222, 257, 292, 327, 362, 396, 430, 464]
 max_prod_per_section = 32
 ```
 
@@ -214,6 +219,9 @@ max_prod_per_section = 32
 | 2025-05-30 | Feature: clasificador de productos JSON + fuzzy matching |
 | 2025-05-30 | Feature: 3 categorías nuevas (Bancos, Cocineta, Pizarrones) |
 | 2025-05-30 | Feature: sinónimos ES/EN con tolerancia a typos y acentos |
+| 2025-05-30 | Template: 3 secciones nuevas agregadas físicamente a Mobiliti |
+| 2025-05-30 | Template: categorías nuevas agregadas a lista Mobiliario y tabla de instalación en Fletes |
+| 2025-05-30 | Script: actualizado para usar 13 secciones en vez de 10 |
 
 ---
 
