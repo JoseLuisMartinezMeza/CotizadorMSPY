@@ -197,8 +197,36 @@ ARMADO DE CARATULA/
 
 ---
 
+## Cambios Adicionales Post-Sesión (2026-06-01)
+
+### 7. Diccionario actualizado: términos lido/mall + pax + categoría renombrada
+- **Términos agregados** a `Escritorios-WorkStation`:
+  - `lido ejecutivo`, `lido izq`, `lido izquierdo`, `lido derecho` + typos (`liddo`, `izquiero`, `isquierdo`)
+  - `mall ejecutivo`, `mall izq`, `mall izquierdo`, `mall derecho` + typos (`maal`)
+  - `pax`, `plazas`, `usuarios`, `puestos`, `workstation`, `workstations`
+- **Categoría renombrada**: `"Escritorios"` → `"Escritorios-WorkStation"`
+- **Template Excel sincronizado**: `Fletes!I8` y `Fletes!M8` actualizados + script ahora auto-sincroniza en runtime.
+- **`lido`** removido de `"Mesas de Juntas"` (es marca, no categoría).
+
+### 8. Campo de descuento en GUI
+- Nuevo campo **"Descuento %"** en `main_cliente.py` (default: 30)
+- Parámetro `--descuento` en `generar_cotizacion_v5_xlwings.py`
+- Fórmula: `factor = 1 - (descuento / 100)` → escrito en `Cotizacion!G{primera_fila_producto}`
+- Ej: 30% → 0.7, 0% → 1.0, 50% → 0.5
+
+### 9. Template Excel restaurado (corrupción por openpyxl)
+- **Problema**: `openpyxl` corrompió `Formato Cotización 2026 GDL (1).xlsx` al modificar `Fletes!I8/M8`.
+- **Fix**: Restaurado desde backup en `COTIZADOR AUTOMATICO/`. Script ahora actualiza Fletes en runtime vía xlwings, sin tocar el template con openpyxl.
+- **Lección**: No usar `openpyxl.save()` en templates con imágenes WMF, validaciones de datos, o macros complejas.
+
+---
+
 ## Próximos Pasos / TODO
 
+- [x] Agregar términos lido/mall/pax al diccionario
+- [x] Renombrar categoría "Escritorios" → "Escritorios-WorkStation"
+- [x] Campo de descuento % en GUI
+- [x] Restaurar template Excel corrupto
 - [ ] Pulir `show_about()` para que no use `messagebox.showinfo` básico; hacer ventana custom con estilo visual consistente
 - [ ] Agregar tests unitarios para el cliente desktop (mock del API)
 - [ ] Considerar firma de código (code signing) para evitar alertas de Windows Defender en el `.exe`
